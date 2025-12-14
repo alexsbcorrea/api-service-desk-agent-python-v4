@@ -1,0 +1,13 @@
+Defina a variável de ambiente do Flask CLI
+# set FLASK_APP=run.py
+
+Inicialize o setup de Migração
+# flask db init
+
+Rodas as migrações
+# flask db migrate -m "inicio"
+
+# flask db upgrade
+
+DATABASE_URL='postgresql+psycopg2://postgres:SD#2025@db.fzabhceycspgakfqrrzx.supabase.co:5432/postgres'
+PORT=5000
