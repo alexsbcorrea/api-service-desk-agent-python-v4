@@ -8,12 +8,13 @@ message_bp = Blueprint('message_bp', __name__)
 @message_bp.route('/messages', methods=['POST'])
 def create_message():
     data = request.get_json()
-    if not data or not 'content' in data or not 'id_thread' in data or not 'id_user' in data:
+    if not data or not 'content' in data or not 'id_thread' in data or not 'id_sender' in data or not 'type_sender' in data:
         return jsonify({'message': 'Missing required fields'}), 400
     new_message = Message(
         content=data['content'],
         id_thread=data['id_thread'],
-        id_user=data['id_user']
+        id_sender=data['id_sender'],
+        type_sender=data['type_sender']
     )
     db.session.add(new_message)
     db.session.commit()

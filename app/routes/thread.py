@@ -16,7 +16,8 @@ def create_thread():
         return jsonify({'message': 'Missing required fields'}), 400
     new_thread = Thread(
         id_preservice=data['id_preservice'],
-        id_user=data['id_user']
+        id_user=data['id_user'],
+        id_operator=data['id_operator']
     )
     db.session.add(new_thread)
     db.session.commit()
@@ -28,6 +29,17 @@ def create_thread():
     ps.active = False
     db.session.commit()
     # Finalizando o pré atendimento
+    
+    # Enviando mensagem inicial
+    new_message = Message(
+        content=data['content'],
+        id_thread=new_thread.id,
+        id_sender=data['id_user'],
+        type_sender=data['type_sender']
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    # Enviando mensagem inicial
 
     return jsonify({'id_thread': new_thread.id}), 201
 
@@ -38,11 +50,11 @@ def get_threads():
 
 @thread_bp.route('/threads/<thread_id>', methods=['GET'])
 def get_thread(thread_id):
-    t = Thread.query.options(selectinload(Thread.user),selectinload(Thread.messages).selectinload(Message.user)).get(thread_id)
-    #t = Thread.query.options(joinedload(Thread.user)).get(thread_id)
+    t = Thread.query.options(selectinload(Thread.user),selectinload(Thread.messages)).get(thread_id)
     messages_data = []
+    print(t.messages[0].sender_name)
     if len(t.messages) > 0:
-        messages_data = list(map(lambda x: {'id': x.id, 'content': x.content, 'name': x.user.name}, t.messages))
+        messages_data = list(map(lambda x: {'id': x.id, 'content': x.content, 'name': x.sender_name}, t.messages))
     else:
         messages_date = []
     if t:

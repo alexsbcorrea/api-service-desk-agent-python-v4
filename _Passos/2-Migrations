@@ -10,4 +10,6 @@ Rodas as migrações
 # flask db upgrade
 
 DATABASE_URL='postgresql+psycopg2://postgres:SD#2025@db.fzabhceycspgakfqrrzx.supabase.co:5432/postgres'
+DATABASE_URL='postgresql+psycopg2://postgres.fzabhceycspgakfqrrzx:SD#2025@aws-0-us-west-2.pooler.supabase.com:5432/postgres'
+
 PORT=5000

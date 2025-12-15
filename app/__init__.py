@@ -11,6 +11,7 @@ from app.routes.user import user_bp
 from app.routes.preservice import preservice_bp
 from app.routes.thread import thread_bp
 from app.routes.message import message_bp
+from app.routes.operator import operator_bp
 #Routes
 
 migrate = Migrate()
@@ -25,6 +26,7 @@ def create_app():
     socketio.init_app(app)
 
     app.register_blueprint(user_bp, url_prefix='/api')
+    app.register_blueprint(operator_bp, url_prefix='/api')
     app.register_blueprint(preservice_bp, url_prefix='/api')
     app.register_blueprint(thread_bp, url_prefix='/api')
     app.register_blueprint(message_bp, url_prefix='/api')
