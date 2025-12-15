@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from app.models.message import Message
 from app.database.db import db
 import uuid
+from app.socketio.events import socketio
 
 message_bp = Blueprint('message_bp', __name__)
 
@@ -18,6 +19,11 @@ def create_message():
     )
     db.session.add(new_message)
     db.session.commit()
+    
+    #Event
+    socketio.emit(f"message-{data['id_thread']}", {'id': data['id_thread']},to=f"chat-{data['id_thread']}")
+    #Event
+    
     return jsonify({'message': 'Message created successfully'}), 201
 
 @message_bp.route('/messages', methods=['GET'])

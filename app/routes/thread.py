@@ -45,14 +45,13 @@ def create_thread():
 
 @thread_bp.route('/threads', methods=['GET'])
 def get_threads():
-    threads = Thread.query.options(selectinload(Thread.user)).all()
-    return jsonify([{'id': str(t.id), 'id_preservice': str(t.id_preservice), 'id_user': str(t.id_user), 'name': str(t.user.name)} for t in threads])
+    threads = Thread.query.options(selectinload(Thread.user),selectinload(Thread.operator)).all()
+    return jsonify([{'id': str(t.id), 'id_preservice': str(t.id_preservice), 'id_user': str(t.id_user), 'id_operator': str(t.id_operator), 'user': str(t.user.name), 'operator': str(t.operator.name)} for t in threads])
 
 @thread_bp.route('/threads/<thread_id>', methods=['GET'])
 def get_thread(thread_id):
     t = Thread.query.options(selectinload(Thread.user),selectinload(Thread.messages)).get(thread_id)
     messages_data = []
-    print(t.messages[0].sender_name)
     if len(t.messages) > 0:
         messages_data = list(map(lambda x: {'id': x.id, 'content': x.content, 'name': x.sender_name}, t.messages))
     else:
