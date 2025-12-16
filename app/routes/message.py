@@ -21,7 +21,7 @@ def create_message():
     db.session.commit()
     
     #Event
-    socketio.emit(f"message-{data['id_thread']}", {'id': data['id_thread']},to=f"chat-{data['id_thread']}")
+    socketio.emit("new_message", {'id_thread': data['id_thread']},to=f"bp-chat-{data['id_thread']}")
     #Event
     
     return jsonify({'message': 'Message created successfully'}), 201
