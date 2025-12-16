@@ -1,5 +1,7 @@
 from flask_socketio import SocketIO, emit, join_room
-from flask import Flask, request
+from flask import Flask, jsonify, request
+from app.database.db import db
+from app.models.message import Message
 
 socketio = SocketIO(cors_allowed_origins="*")
 
@@ -15,4 +17,41 @@ def handle_connect(auth):
     profile = request.args.get('profile')
     
     join_room(room)
+
+@socketio.on("new_message")
+def handle_message(data):
+    content = data.get('content')
+    id_sender = data.get('id_sender')
+    name = data.get('name')
+    id_thread = data.get('id_thread')
+    type_sender = data.get('type_sender')
+    room = data.get('room')
     
+    print("Conteúdo",content)
+    print("ID Sender",id_sender)
+    print("Name",name)
+    print("ID Thread",id_thread)
+    print("Type Sender",type_sender)
+    print("Sala", room)
+    
+    join_room(room)
+    
+    new_message = Message(
+        content=content,
+        id_thread=id_thread,
+        id_sender=id_sender,
+        type_sender=type_sender,
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    
+    dataObj = {
+        'id': new_message.id,
+        'content': content,
+        'id_thread': id_thread,
+        'id_user': id_sender,
+        'name': name,
+        'profile': type_sender        
+    }
+    
+    socketio.emit("new_message",to=f"chat-{id_thread}")
