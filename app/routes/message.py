@@ -3,8 +3,31 @@ from app.models.message import Message
 from app.database.db import db
 import uuid
 from app.socketio.events import socketio
+from app.chatbot.message_manager import handle_message
 
 message_bp = Blueprint('message_bp', __name__)
+
+@message_bp.route('/messages/chatbot', methods=['POST'])
+def create_message_chatbot():
+    data = request.get_json()
+    if not data or not 'content' in data:
+        return jsonify({'message': 'Missing required fields'}), 400
+    # new_message = Message(
+    #     content=data['content'],
+    #     id_thread=data['id_thread'],
+    #     id_sender=data['id_sender'],
+    #     type_sender=data['type_sender']
+    # )
+    # db.session.add(new_message)
+    # db.session.commit()
+    
+    # #Event
+    # socketio.emit("new_message", {'id_thread': data['id_thread']},to=f"bp-chat-{data['id_thread']}")
+    # #Event
+    
+    response = handle_message(data['content'])
+    
+    return jsonify({'message': response}), 200
 
 @message_bp.route('/messages', methods=['POST'])
 def create_message():

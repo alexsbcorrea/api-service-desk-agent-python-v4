@@ -1,0 +1,42 @@
+{
+  "intents": [
+    {
+      "name": "saudacao",
+      "keywords": ["oi", "olá", "bom dia", "boa tarde", "boa noite"]
+    },
+    {
+      "name": "senha_ad",
+      "keywords": [
+        "senha rh net",
+        "senha do rh net",
+        "senha de rh net",
+        "senha portal de ponto",
+        "senha do portal de ponto",
+        "senha de portal de ponto",
+        "senha service desk",
+        "senha do service desk",
+        "senha de service desk",
+        "senha top desk",
+        "senha de top desk",
+        "senha do top desk",
+        "senha topdesk",
+        "senha do topdesk",
+        "senha de topdesk",
+        "senha potencializa",
+        "senha do potencializa",
+        "senha de potencializa",
+        "senha email",
+        "senha do email",
+        "senha de email"
+      ]
+    },
+    {
+      "name": "senha_tasy",
+      "keywords": ["senha tasy", "senha do tasy", "senha de tasy"]
+    },
+    {
+      "name": "cobranca_chamado",
+      "keywords": ["status", "andamento", "informação", "detalhes", "dados"]
+    }
+  ]
+}
