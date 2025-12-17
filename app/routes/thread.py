@@ -11,6 +11,7 @@ thread_bp = Blueprint('thread_bp', __name__)
 
 @thread_bp.route('/threads', methods=['POST'])
 def create_thread():
+    print("REQUISIÇÃO RECEBIDA")
     data = request.get_json()
     if not data or not 'id_preservice' in data or not 'id_user' in data:
         return jsonify({'message': 'Missing required fields'}), 400

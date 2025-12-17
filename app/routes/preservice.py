@@ -23,7 +23,7 @@ def create_preservice():
 @preservice_bp.route('/preservices', methods=['GET'])
 def get_preservices():
     preservices = PreService.query.options(joinedload(PreService.user)).filter_by(active=True).order_by(asc(PreService.created_at)).all()
-    return jsonify([{'id': str(ps.id), 'active': ps.active, 'initial_msg': str(ps.initial_msg), 'id_user': str(ps.id_user), 'user': str(ps.user.name), 'profile': str(ps.user.profile)} for ps in preservices])
+    return jsonify([{'id': str(ps.id), 'active': ps.active, 'initial_msg': str(ps.initial_msg), 'id_user': str(ps.id_user), 'user': str(ps.user.name), 'profile': str(ps.user.profile), 'created_at': str(ps.created_at), 'updated_at': str(ps.updated_at)} for ps in preservices])
 
 @preservice_bp.route('/preservices/<preservice_id>', methods=['GET'])
 def get_preservice(preservice_id):
