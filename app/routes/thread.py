@@ -53,7 +53,7 @@ def get_thread(thread_id):
     t = Thread.query.options(selectinload(Thread.user),selectinload(Thread.messages)).get(thread_id)
     messages_data = []
     if len(t.messages) > 0:
-        messages_data = list(map(lambda x: {'id': x.id, 'content': x.content, 'name': x.sender_name, 'profile': x.type_sender}, t.messages))
+        messages_data = list(map(lambda x: {'id': x.id, 'content': x.content, 'name': x.sender_name,'id_user': str(x.id_sender), 'profile': x.type_sender, 'created_at': str(x.created_at), 'updated_at': str(x.updated_at), 'id_thread': str(x.id_thread)}, t.messages))
     else:
         messages_date = []
     if t:

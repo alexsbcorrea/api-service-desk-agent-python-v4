@@ -46,12 +46,14 @@ def handle_message(data):
     db.session.commit()
     
     dataObj = {
-        'id': new_message.id,
+        'id': str(new_message.id),
         'content': content,
-        'id_thread': id_thread,
-        'id_user': id_sender,
+        'id_thread': str(id_thread),
+        'id_user': str(id_sender),
         'name': name,
-        'profile': type_sender        
+        'profile': type_sender,
+        'created_at': str(new_message.created_at),   
+        'updated_at': str(new_message.updated_at)   
     }
     
-    socketio.emit("new_message",to=f"chat-{id_thread}")
+    socketio.emit("new_message",dataObj,to=f"bp-chat-{id_thread}")
