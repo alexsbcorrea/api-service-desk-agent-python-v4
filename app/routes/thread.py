@@ -6,12 +6,12 @@ from app.database.db import db
 import uuid
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import selectinload
+from app.socketio.events import socketio
 
 thread_bp = Blueprint('thread_bp', __name__)
 
 @thread_bp.route('/threads', methods=['POST'])
 def create_thread():
-    print("REQUISIÇÃO RECEBIDA")
     data = request.get_json()
     if not data or not 'id_preservice' in data or not 'id_user' in data:
         return jsonify({'message': 'Missing required fields'}), 400
@@ -41,8 +41,15 @@ def create_thread():
     db.session.add(new_message)
     db.session.commit()
     # Enviando mensagem inicial
+    
+    # #Event
+    print("DEBUGGGGGGGGGGGGGGGGG")
+    sala = f"bp-chat-atendimento-{data['id_preservice']}"
+    print(sala)
+    socketio.emit("start_thread", {'id_thread': str(new_thread.id)},to=sala)
+    # #Event
 
-    return jsonify({'id_thread': new_thread.id}), 201
+    return jsonify({'id_thread': new_thread.id, 'id_user': new_thread.id_user}), 201
 
 @thread_bp.route('/threads', methods=['GET'])
 def get_threads():

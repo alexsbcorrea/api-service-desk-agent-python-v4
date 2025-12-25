@@ -7,7 +7,7 @@ socketio = SocketIO(cors_allowed_origins="*")
 
 @socketio.on("connect")
 def handle_connect(auth):
-    print("Client connected")
+    print("Cliente Conectado")
     
     token = request.args.get('token')
     room = request.args.get('room')
@@ -15,6 +15,10 @@ def handle_connect(auth):
     name = request.args.get('name')
     email = request.args.get('email')
     profile = request.args.get('profile')
+    
+    print("Token: ",token)
+    print("Usuário: ", name)
+    print("Sala: ", room)
     
     join_room(room)
 

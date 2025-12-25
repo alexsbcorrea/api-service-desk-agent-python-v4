@@ -1,8 +1,8 @@
 """inicio
 
-Revision ID: 3b80b00cafaa
+Revision ID: 705693221fd1
 Revises: 
-Create Date: 2025-12-15 13:05:40.567252
+Create Date: 2025-12-25 10:09:42.062350
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '3b80b00cafaa'
+revision = '705693221fd1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -50,6 +50,7 @@ def upgrade():
     )
     op.create_table('threads',
     sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('incident', sa.String(length=255), nullable=True),
     sa.Column('id_preservice', sa.UUID(), nullable=False),
     sa.Column('id_user', sa.UUID(), nullable=False),
     sa.Column('id_operator', sa.UUID(), nullable=False),
