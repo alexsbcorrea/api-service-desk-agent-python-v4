@@ -7,6 +7,7 @@ import uuid
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import selectinload
 from app.socketio.events import socketio
+from app.integrations.ITSMC import generate_incident
 
 thread_bp = Blueprint('thread_bp', __name__)
 
@@ -15,10 +16,16 @@ def create_thread():
     data = request.get_json()
     if not data or not 'id_preservice' in data or not 'id_user' in data:
         return jsonify({'message': 'Missing required fields'}), 400
+    
+    # Generate Incidente
+    incident = generate_incident()
+    # Generate Incidente
+    
     new_thread = Thread(
         id_preservice=data['id_preservice'],
         id_user=data['id_user'],
-        id_operator=data['id_operator']
+        id_operator=data['id_operator'],
+        incident=incident
     )
     db.session.add(new_thread)
     db.session.commit()
@@ -43,7 +50,6 @@ def create_thread():
     # Enviando mensagem inicial
     
     # #Event
-    print("DEBUGGGGGGGGGGGGGGGGG")
     sala = f"bp-chat-atendimento-{data['id_preservice']}"
     print(sala)
     socketio.emit("start_thread", {'id_thread': str(new_thread.id)},to=sala)
@@ -54,7 +60,7 @@ def create_thread():
 @thread_bp.route('/threads', methods=['GET'])
 def get_threads():
     threads = Thread.query.options(selectinload(Thread.user),selectinload(Thread.operator)).all()
-    return jsonify([{'id': str(t.id), 'id_preservice': str(t.id_preservice), 'id_user': str(t.id_user), 'id_operator': str(t.id_operator), 'user': str(t.user.name), 'operator': str(t.operator.name)} for t in threads])
+    return jsonify([{'id': str(t.id),'incident': str(t.incident), 'id_preservice': str(t.id_preservice), 'id_user': str(t.id_user), 'id_operator': str(t.id_operator), 'user': str(t.user.name), 'operator': str(t.operator.name)} for t in threads])
 
 @thread_bp.route('/threads/<thread_id>', methods=['GET'])
 def get_thread(thread_id):
@@ -65,7 +71,7 @@ def get_thread(thread_id):
     else:
         messages_date = []
     if t:
-        return jsonify({'id': str(t.id), 'id_preservice': str(t.id_preservice), 'id_user': str(t.id_user), 'user': str(t.user.name), 'messages': messages_data})
+        return jsonify({'id': str(t.id),'incident': str(t.incident), 'id_preservice': str(t.id_preservice), 'id_user': str(t.id_user), 'user': str(t.user.name), 'messages': messages_data})
     return jsonify({'message': 'Thread not found'}), 404
 
 @thread_bp.route('/threads/<thread_id>', methods=['DELETE'])
