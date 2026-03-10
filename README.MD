@@ -21,3 +21,16 @@
 4 - Instale as dependências do projeto
 
 # pip install -r requirements.txt
+
+5 - Inicialize o setup de Migração
+# flask db init
+
+6 - Crie a primeira migração
+# flask db migrate -m "inicio"
+
+7 - Execute a primeira migração
+# flask db upgrade
+
+5 - Execute o projeto
+
+# python run.py
